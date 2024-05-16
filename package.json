@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --config .prettierrc 'app/' --write",
+    "format": "prettier --config .prettierrc '**/*.{ts,tsx,json}' --write",
     "typecheck": "tsc --noEmit",
     "prepare": "husky install"
   },
@@ -40,10 +40,10 @@
     "typescript": "^5"
   },
   "lint-staged": {
-    "*.ts": [
-      "eslint --quiet --fix"
+    "*.{ts,tsx}": [
+      "eslint"
     ],
-    "*.{json,ts}": [
+    "*.{json,ts,tsx}": [
       "prettier --write --ignore-unknown"
     ]
   }

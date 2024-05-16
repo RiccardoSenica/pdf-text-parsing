@@ -28,28 +28,31 @@ export function Form({ setLoading, setError, setParsedText }: FormProps) {
     setClearing(false);
     setFile(undefined);
     setParsedText('');
-  }, []);
+  }, [setParsedText]);
 
-  const validateFile = useCallback((file: File) => {
-    if (file.type !== 'application/pdf') {
-      setError(
-        "The file you've selected is not a PDF file. Please select a PDF file."
-      );
-      setLoading(false);
+  const validateFile = useCallback(
+    (file: File) => {
+      if (file.type !== 'application/pdf') {
+        setError(
+          "The file you've selected is not a PDF file. Please select a PDF file."
+        );
+        setLoading(false);
 
-      return false;
-    }
+        return false;
+      }
 
-    // This limit is caused by the project being deployed on Vercel using a free tier, with limited resources for the cloud functions (it can be commented out if running locally)
-    if (file.size > 1024 * 1024) {
-      setError('The file must be smaller than 1MB.');
-      setLoading(false);
+      // This limit is caused by the project being deployed on Vercel using a free tier, with limited resources for the cloud functions (it can be commented out if running locally)
+      if (file.size > 1024 * 1024) {
+        setError('The file must be smaller than 1MB.');
+        setLoading(false);
 
-      return false;
-    }
+        return false;
+      }
 
-    return true;
-  }, []);
+      return true;
+    },
+    [setError, setLoading]
+  );
 
   const uploadFile = useCallback(async () => {
     if (!file) return;
@@ -76,7 +79,7 @@ export function Form({ setLoading, setError, setParsedText }: FormProps) {
       setClearing(true);
       setLoading(false);
     }
-  }, [file, validateFile]);
+  }, [file, validateFile, setError, setParsedText, setClearing, setLoading]);
 
   const handleUpload = useCallback(() => {
     setLoading(true);
@@ -84,7 +87,7 @@ export function Form({ setLoading, setError, setParsedText }: FormProps) {
     setParsedText('');
 
     uploadFile();
-  }, [uploadFile]);
+  }, [uploadFile, setLoading, setError, setParsedText]);
 
   function renderForm() {
     if (clearing) {
